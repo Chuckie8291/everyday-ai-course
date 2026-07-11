@@ -46,6 +46,15 @@ app.get("/api/verify/:sessionId", async (req, res) => {
   }
 });
 
+// List slide images for a module
+app.get("/api/slides/:modulePrefix", (req, res) => {
+  const fs = require("fs");
+  const dir = path.join(__dirname, "public", "slides");
+  if (!fs.existsSync(dir)) return res.json([]);
+  const files = fs.readdirSync(dir).filter(f => f.startsWith(req.params.modulePrefix) && f.endsWith(".jpg")).sort();
+  res.json(files);
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 

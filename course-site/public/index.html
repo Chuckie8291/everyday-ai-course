@@ -73,6 +73,13 @@ a{color:var(--teal)}
 .gate-box p{color:var(--muted);margin-bottom:24px}
 .loading{display:inline-block;width:24px;height:24px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+.slide-gallery{display:flex;flex-direction:column;gap:16px;margin:16px 0}
+.slide-img-wrap{position:relative;background:var(--white);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer}
+.slide-img-wrap img{width:100%;display:block;transition:transform .2s}
+.slide-img-wrap img.zoomed{transform:scale(1.5);cursor:zoom-out}
+.slide-num{position:absolute;bottom:8px;right:12px;background:rgba(0,0,0,.6);color:var(--white);padding:2px 8px;border-radius:4px;font-size:11px}
+
 </style>
 </head>
 <body>
@@ -214,6 +221,30 @@ function buildSidebar(){
 }
 
 // Render lesson
+
+// Load slide images for the current module
+function loadSlides(modId) {
+  const modNames = ["Module-0-Welcome","Module-1-First-Conversation","Module-2-Everyday-Life","Module-3-AI-for-Work","Module-4-Multi-Tool-Mastery","Module-5-API-Bridge","Module-6-AI-Agents","Module-7-Staying-Safe"];
+  const modName = modNames[modId];
+  const gallery = document.getElementById("slideGallery");
+  if (!gallery) return;
+  
+  // Find all slides for this module
+  fetch(`/api/slides/${modName}`)
+    .then(r => r.json())
+    .then(links => {
+      gallery.innerHTML = links.map((img, i) => 
+        `<div class="slide-img-wrap">
+          <img src="/slides/${img}" alt="Slide ${i+1}" loading="lazy" onclick="this.classList.toggle('zoomed')">
+          <div class="slide-num">Slide ${i+1}</div>
+        </div>`
+      ).join("");
+    })
+    .catch(() => {
+      gallery.innerHTML = "<p style='color:var(--muted)'>Slide images not available in dev mode. Export PPTXs as PDFs first.</p>";
+    });
+}
+
 function renderLesson(modId,lessonId){
   const mod=COURSE.find(m=>m.id===modId);
   const lesson=mod.lessons.find(l=>l.id===lessonId);
@@ -234,9 +265,7 @@ function renderLesson(modId,lessonId){
     </div>
     <div class="progress-bar"><div class="fill" style="width:${progressPercent()}%"></div></div>
     <h3 style="margin-top:24px">Slides</h3>
-    <div class="slide-list">
-      ${lesson.slides.map(s=>`<div class="slide-item">${s}</div>`).join("")}
-    </div>
+    <div class="slide-gallery" id="slideGallery"></div>
     <h3 style="margin-top:24px">Full Narration Script</h3>
     <div class="script">${lesson.script}</div>
     <div class="exercise">
@@ -249,6 +278,7 @@ function renderLesson(modId,lessonId){
     </div>
   `;
   buildSidebar();
+  loadSlides(modId);
   if(window.innerWidth<=768)document.querySelector(".sidebar").classList.remove("open");
 }
 
