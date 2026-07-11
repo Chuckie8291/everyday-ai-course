@@ -1,0 +1,16 @@
+{
+  "name": "everyday-ai-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build-slides.js",
+  "scripts": {
+    "test": "node -e \"const fs=require('fs');const zlib=require('zlib');const files=fs.readdirSync('.').filter(f=>f.endsWith('.pptx'));let ok=0;files.forEach(f=>{try{const b=fs.readFileSync(f);if(b[0]!==0x50||b[1]!==0x4B)throw new Error('Bad magic');ok++;console.log('OK:',f,'('+(b.length/1024).toFixed(0)+'KB)')}catch(e){console.error('FAIL:',f,e.message);process.exitCode=1}});console.log(ok+'/'+files.length+' valid')"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "everyday-ai-course-site",
+  "version": "1.0.0",
+  "description": "Everyday AI — Sellable course website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "stripe": "^17.0.0"
+  }
+}

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everyday AI: From Curious to Confident</title>
+<style>
+:root{--navy:#1B2838;--teal:#0D9488;--cream:#F8F6F0;--gold:#D4A853;--charcoal:#2D3748;--muted:#718096;--white:#FFF;--red:#DC2626;--green:#059669}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--charcoal);background:var(--cream);line-height:1.6}
+a{color:var(--teal)}
+.btn{display:inline-block;padding:14px 32px;border-radius:8px;font-size:17px;font-weight:bold;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:#c99a3a;transform:translateY(-1px)}
+.btn-teal{background:var(--teal);color:var(--white)}
+.btn-teal:hover{background:#0b7d73;transform:translateY(-1px)}
+
+/* LANDING */
+.landing{min-height:100vh}
+.hero{background:var(--navy);padding:80px 20px;text-align:center;color:var(--white)}
+.hero h1{font-family:Georgia,serif;font-size:clamp(32px,6vw,52px);margin-bottom:16px}
+.hero .sub{font-size:clamp(16px,3vw,20px);color:var(--gold);font-style:italic;margin-bottom:32px}
+.hero p{font-size:16px;color:var(--muted);max-width:600px;margin:0 auto 40px}
+
+.section{padding:60px 20px;max-width:900px;margin:0 auto}
+.section h2{font-family:Georgia,serif;font-size:30px;margin-bottom:12px;color:var(--navy)}
+.section .lead{font-size:16px;color:var(--muted);margin-bottom:24px}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:24px 0}
+.mod-card{background:var(--white);border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid var(--teal)}
+.mod-card .num{font-size:11px;color:var(--teal);font-weight:bold;text-transform:uppercase;letter-spacing:2px}
+.mod-card .name{font-size:17px;font-weight:bold;margin:4px 0;color:var(--charcoal)}
+.mod-card .info{font-size:13px;color:var(--muted)}
+.pricing{background:var(--white);border-radius:12px;padding:40px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.06);margin:40px 0}
+.pricing .price{font-size:48px;font-weight:bold;color:var(--navy)}
+.pricing .desc{color:var(--muted);margin:12px 0 24px}
+
+/* COURSE VIEWER */
+.viewer{display:none;min-height:100vh}
+.viewer.active{display:flex}
+.sidebar{width:280px;background:var(--navy);color:var(--white);padding:20px 0;overflow-y:auto;height:100vh;position:sticky;top:0;flex-shrink:0}
+.sidebar h3{padding:0 20px 16px;font-family:Georgia,serif;font-size:18px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px}
+.mod-link{display:block;padding:10px 20px;color:rgba(255,255,255,.7);cursor:pointer;font-size:14px;transition:all .15s;border-left:3px solid transparent}
+.mod-link:hover,.mod-link.active{color:var(--white);background:rgba(255,255,255,.05);border-left-color:var(--teal)}
+.mod-link .mnum{font-size:11px;color:var(--teal);display:block}
+.lesson-link{display:block;padding:6px 20px 6px 36px;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;transition:all .15s}
+.lesson-link:hover,.lesson-link.active{color:var(--white)}
+.content{flex:1;padding:30px 40px;overflow-y:auto;height:100vh}
+.content h2{font-family:Georgia,serif;font-size:28px;margin-bottom:6px}
+.content .lesson-label{color:var(--teal);font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:2px}
+.content .script{background:var(--white);border-radius:8px;padding:24px;margin:20px 0;white-space:pre-wrap;font-size:14px;line-height:1.8;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.content .slide-list{margin:16px 0}
+.content .slide-item{background:var(--white);border-radius:8px;padding:16px 20px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.04);border-left:3px solid var(--teal);font-size:14px}
+.content .exercise{background:#ECFDF5;border-radius:8px;padding:20px;margin:20px 0;border-left:4px solid var(--green)}
+.course-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.progress-bar{height:4px;background:#E5E7EB;border-radius:2px;margin:12px 0}
+.progress-bar .fill{height:100%;background:var(--teal);border-radius:2px;transition:width .3s}
+.mobile-toggle{display:none;background:var(--navy);color:var(--white);border:none;padding:10px 16px;font-size:14px;cursor:pointer;width:100%;text-align:left}
+
+@media(max-width:768px){
+  .viewer.active{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;display:none}
+  .sidebar.open{display:block}
+  .mobile-toggle{display:block}
+  .content{padding:20px;height:auto}
+  .hero{padding:50px 16px}
+  .section{padding:40px 16px}
+}
+
+/* PAYMENT GATE */
+.gate{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);color:var(--white);text-align:center;padding:20px}
+.gate-box{max-width:400px}
+.gate-box h2{font-family:Georgia,serif;font-size:28px;margin-bottom:16px}
+.gate-box p{color:var(--muted);margin-bottom:24px}
+.loading{display:inline-block;width:24px;height:24px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing" class="landing">
+  <div class="hero">
+    <h1>Everyday AI</h1>
+    <div class="sub">From Curious to Confident</div>
+    <p>A video course for grown-ups who didn't grow up with this stuff. No jargon. No coding. Just practical AI skills for your actual life.</p>
+    <button class="btn btn-gold" onclick="buy()">Get the Full Course — $97</button>
+    <p style="margin-top:16px;font-size:13px;color:var(--muted)">8 modules • 42+ lessons • ~3 hours • Lifetime access</p>
+  </div>
+
+  <div class="section">
+    <h2>What You'll Learn</h2>
+    <div class="module-grid" id="modGrid"></div>
+  </div>
+
+  <div class="section">
+    <div class="pricing">
+      <div class="price">$97</div>
+      <div class="desc">One payment. Lifetime access. All 8 modules.</div>
+      <button class="btn btn-gold" onclick="buy()">Enroll Now</button>
+      <p style="margin-top:14px;font-size:13px;color:var(--muted)">30-day money-back guarantee. No questions asked.</p>
+    </div>
+  </div>
+
+  <div class="section" style="text-align:center;padding-bottom:40px">
+    <p style="color:var(--muted);font-size:14px">Built for people 40+ who want to use AI — not just read about it.</p>
+  </div>
+</div>
+
+<!-- PAYMENT GATE (shown after Stripe redirect) -->
+<div id="gate" class="gate" style="display:none">
+  <div class="gate-box">
+    <div class="loading"></div>
+    <p style="margin-top:20px">Verifying your purchase...</p>
+  </div>
+</div>
+
+<!-- COURSE VIEWER (shown after payment verified) -->
+<div id="viewer" class="viewer">
+  <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Modules</button>
+  <div class="sidebar" id="sidebar"></div>
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+// ====== COURSE DATA ======
+const COURSE = [
+{id:0,title:"Welcome — You Belong Here",lessons:[
+  {id:"0.1",title:"What to Expect",duration:"3 min",slides:["Course tour","How the videos work","What you'll need","How to get help"],script:"Hi, and welcome. I'm glad you're here.\n\nIf you've been hearing about AI — ChatGPT, Claude, all of it — and feeling like everyone else got a head start except you... you're not alone. And you're in exactly the right place.\n\nThis course is called Everyday AI. It's designed for people who didn't grow up with this stuff. People who want to understand what AI can actually do for them — not in theory, but in real life. At the kitchen table. At work. On vacation. In your inbox.\n\nThree things to expect:\n\nFirst: you don't need a tech background. If you can send an email and browse the web, you have everything you need. We start from absolute zero.\n\nSecond: each video is short — four to eight minutes. You can watch one with your morning coffee. There's no marathon here. No overwhelm.\n\nAnd third: you'll learn by doing. Every lesson ends with a simple exercise. You watch me do something, then you try it yourself on your own device.\n\nThat's the whole philosophy: watch, try, succeed. Then move on to the next thing when you're ready."},
+  {id:"0.2",title:"You Cannot Break It",duration:"4 min",slides:["The #1 fear addressed","What's the worst that can happen?","How to recover from any mistake","Permission to experiment"],script:"Let's address the elephant in the room.\n\nIf you've ever thought to yourself: 'I'm not a tech person.' Or 'This AI stuff is for younger people.' Or 'I'll probably break something.'\n\n...I need you to hear this: you're exactly who this course is for.\n\nOver two and a half million people have taken courses like this one. Most of them started exactly where you are right now. Feeling curious, but also a little intimidated.\n\nYou're not behind. You're right on time.\n\nHere's what I know about you: you've been asking good questions your whole life. You've learned new things before — probably lots of them. AI is just the next thing to figure out. And honestly? It might be the easiest one yet, because you get to talk to it in plain English.\n\nYou cannot break it. There is no button you can click that will cause permanent damage. The worst that can happen is... you close the tab and start over. That's it."},
+  {id:"0.3",title:"How This Course Works",duration:"3 min",slides:["Self-paced format","Watch + do format","Cheat sheets in every lesson","The community","Certificate at the end"],script:"Here's how each lesson works. Four simple steps.\n\nStep one: watch. A short video where I show you something.\n\nStep two: try it. At the end of every video, you'll get a specific exercise. You pause the video, switch over to your own device, and do the thing you just watched me do.\n\nStep three: grab your cheat sheet. Every lesson comes with a one-page PDF — the key steps, a screenshot of what success looks like, and a troubleshooting tip.\n\nStep four: repeat. When you're ready, move on to the next lesson. There are no deadlines. No due dates. This course is completely self-paced.\n\nThe whole thing is seven modules — about forty-two lessons — and by the end you'll get a certificate of completion.\n\nBut more importantly, you'll have a new skill. One that makes your life easier every single day."}
+]},
+{id:1,title:"Your First AI Conversation",lessons:[
+  {id:"1.1",title:"What Is AI, Really?",duration:"6 min",slides:["The kitchen analogy","AI as a sous-chef who's read every cookbook","What AI can and can't do","No jargon, no math"],script:"Before you type a single word, let me explain what's actually happening when you talk to an AI.\n\nHere's the best way to think about it: imagine a sous-chef who has read every cookbook ever written. Every recipe. Every cooking technique.\n\nThis sous-chef has never actually cooked in your kitchen. They've never tasted your food. But when you say 'I want to make something with chicken and rice,' they can instantly pull from millions of recipes and give you options.\n\nThat's what AI is. It has read an enormous amount of text and it's really good at predicting what words should come next, given what you asked.\n\nFive things to remember:\nOne — it knows a lot.\nTwo — it doesn't actually think or understand.\nThree — it can be wrong. You are always the boss.\nFour — better instructions equal better results.\nFive — you guide it with your words."},
+  {id:"1.2",title:"Setting Up Your Free Account",duration:"5 min",slides:["ChatGPT vs Claude — which to pick","Step-by-step account creation","Sign in with Google explained","The free tier is all you need"],script:"Before we do anything, you need an account. The good news: it's free, and it takes about two minutes.\n\nYou have two great options: ChatGPT (most popular, great for creativity) or Claude (excellent with long documents, warmer tone). Both are free.\n\nHere's exactly what you'll do:\nStep one — go to chatgpt.com.\nStep two — click 'Sign Up.'\nStep three — create your account (Sign in with Google is fastest).\nStep four — check your email for a confirmation link.\nStep five — you're in. You'll see a chat screen with a text box.\n\nIf any of this feels confusing, pause and re-watch. Or check the cheat sheet."},
+  {id:"1.3",title:"Your First Question",duration:"5 min",slides:["The chat screen explained","Type something — anything","What happens behind the scenes","The conversation thread"],script:"This is what you're looking at right now. On your screen, you'll see a text box — usually at the bottom. That's where you type.\n\nI want you to type something right now. Pause and try it.\n\nHere's a good first question: 'How do I make the perfect scrambled eggs?'\n\nType it exactly like that. Press Enter. Watch what happens.\n\nWhatever it gave you back — a recipe, some tips — that's the thing. That's all it is. You ask. It responds. You can keep going."},
+  {id:"1.4",title:"The Art of Asking Good Questions",duration:"7 min",slides:["Three ingredients: be specific, give context, say what you want","Before/after examples","Common mistakes and fixes"],script:"The single most important skill you'll learn in this entire course: asking good questions.\n\nThree ingredients:\n\nBe specific. 'Tell me about Italy' vs 'What are the best towns to visit in Tuscany for a couple in their 50s who love food and wine?'\n\nGive context. 'Write an email' vs 'Write a polite email to my landlord explaining that the AC broke and I'd like it fixed this week.'\n\nSay what you want. 'Tell me about exercise' vs 'Give me a 20-minute home workout for someone in their 50s, no equipment, with warm-up and cool-down included.'\n\nThis isn't hard. It's the same skill you use when explaining what you want to another person."},
+  {id:"1.5",title:"Getting Useful Answers Every Time",duration:"7 min",slides:["Follow-up questions","'Try again but simpler'","Asking for clarification","The 'explain it like I'm 12' trick"],script:"Your follow-up toolkit — five simple things you can say to make any answer better:\n\nTool one: 'Try again, but simpler.' If the answer is complicated, say 'Explain that like I'm 12.'\n\nTool two: 'Can you be more specific?' Push for details.\n\nTool three: 'What are my options?' Get alternatives.\n\nTool four: 'Format this as...' Put it in a table, bullet points, or step-by-step list.\n\nTool five: 'Check your work.' Ask the AI to verify itself.\n\nThese five techniques work in almost any conversation."},
+  {id:"1.6",title:"Practice: 5 Real Conversations",duration:"6 min",slides:["Ask for a recipe","Summarize something","Write a thank-you note","Explain a concept","Plan a weekend trip"],script:"Now it's your turn. Five scenarios. Pause after each one and try it yourself.\n\n1. Ask for a recipe: 'Give me a simple recipe for chocolate chip cookies using ingredients I probably already have.'\n\n2. Summarize something: 'Summarize the key points of [topic] in three bullet points.'\n\n3. Write something nice: 'Write a short thank-you note to a friend who helped me move.'\n\n4. Explain a concept: 'Explain how [something] works, in simple terms.'\n\n5. Plan something: 'Help me plan a weekend itinerary for [city].'\n\nYou did it. You just had five real AI conversations."}
+]},
+{id:2,title:"AI for Your Everyday Life",lessons:[
+  {id:"2.1",title:"AI for Meal Planning & Groceries",duration:"7 min",slides:["From 'I have nothing to eat' to dinner","Weekly meal plans","Dietary restrictions","Shopping lists organized by aisle"],script:"Let me show you something that might change your evenings forever.\n\nType: 'I have chicken breasts, spinach, rice, eggs, and an onion. Give me 3 different dinner ideas using only these ingredients. Under 45 minutes each.'\n\nIn about ten seconds, you get back three complete meal ideas with cooking times and instructions.\n\nGo further: 'Plan 5 dinners for this week. I'm cooking for 2. We like Mexican and Italian. Nothing with seafood. Include a grocery list organized by aisle.'\n\nOr: 'I'm gluten-free and my husband is diabetic. Give us a 3-day meal plan.'\n\nThe AI handles the complexity. You just eat."},
+  {id:"2.2",title:"AI for Managing Your Money",duration:"7 min",slides:["Budget help","Analyze spending","Understand bills and financial terms","Tax prep assistance","Safety: what NOT to share"],script:"Important safety rule first: never share account numbers, SSN, or full bank details with AI.\n\nWith that said, here's what AI can do:\n\nBudgeting: 'I make $4,200/month after taxes. My rent is $1,400. Help me create a monthly budget.'\n\nAnalyze spending: paste your last month's categories and ask 'Where am I overspending?'\n\nUnderstand bills: 'Explain this medical bill in plain English.'\n\nTax prep: 'I'm self-employed. What expenses can I deduct?'\n\nThe AI doesn't replace an accountant. It amplifies your preparation."},
+  {id:"2.3",title:"AI for Planning Trips",duration:"7 min",slides:["Full itinerary in one ask","Day-by-day plans","Restaurant recommendations","Packing lists","Backup plans for rain"],script:"Type: 'Plan a 4-day trip to Charleston, SC for a couple in their 50s. We love history, local food, and walking tours. Budget is moderate. Include a day-by-day itinerary with restaurant suggestions.'\n\nWhat you get back is remarkable. The AI picks a hotel, maps out each day, recommends restaurants, and even asks follow-up questions: 'Want me to adjust the budget? Add more history? Include driving directions?'\n\nYou can also get packing lists, restaurant finders, backup plans for rainy days, and language help for international trips.\n\nYour personal travel agent. In your pocket. Free."},
+  {id:"2.4",title:"AI for Difficult Emails",duration:"7 min",slides:["Complaint to a contractor","Responding to passive-aggression","Writing condolences","Saying no politely"],script:"Now let's talk about hard emails.\n\nComplaint to a contractor: describe the situation, ask for a 'firm but professional' email.\n\nPassive-aggressive colleague: ask for a 'calm, professional response that corrects the record.'\n\nCondolences: 'My neighbor's father passed away. Write a short, warm note.'\n\nSaying no: 'I was invited to join a committee I don't have time for. Write a gracious decline.'\n\nAfter the AI writes a draft, you can adjust the tone: 'Make this sound warmer.' 'Make this more professional.' 'Show me 3 versions so I can pick.'"},
+  {id:"2.5",title:"AI for Health & Medical Info",duration:"7 min",slides:["Understand a diagnosis in plain English","Questions to ask your doctor","Medication info","Fitness planning for beginners"],script:"Important disclaimer: AI is NOT a doctor.\n\nWith that said, AI helps: 'My doctor said I have [condition]. Explain what this means in plain English. What questions should I ask?'\n\nMedications: 'I was prescribed [medication]. What are common side effects?'\n\nTest results: 'My blood test shows [values]. Explain what each means.'\n\nFitness: 'I'm 55, haven't exercised in years. Give me a safe 4-week walking plan.'\n\nAI helps you understand and prepare. You make the decisions. You talk to your doctor."},
+  {id:"2.6",title:"AI for Learning Anything Faster",duration:"7 min",slides:["The Socratic tutor prompt","Learning a language","Summarizing books and articles","Mastering a new skill"],script:"This might be my favorite use of AI. Not as an answer machine — as a teacher.\n\nTry this prompt: 'I want to learn about [topic]. Act as a patient, encouraging tutor. Start by asking me what I already know. Then explain the basics. Ask me questions to check my understanding. If I get stuck, give hints.'\n\nThe AI doesn't dump information. It teaches you. It adapts to your level. It never gets frustrated.\n\nTry it with: investing basics, world history, how computers work, photography, astronomy... anything."},
+  {id:"2.7",title:"AI for Family & Home",duration:"7 min",slides:["Homework help","Family scheduling","Party planning","Home maintenance checklists","Gift ideas","Decluttering plans"],script:"The last lesson in this module is about the people and place you care about most.\n\nHomework: 'My 8th grader is struggling with fractions. Give me 3 ways to explain fraction division.'\n\nFamily scheduling: describe your week's activities and ask for a dinner plan that works.\n\nParty planning: 'I'm hosting a 60th birthday for my wife. 25 guests, BBQ theme. Give me a planning timeline.'\n\nHome maintenance: 'Create a seasonal checklist for my house.'\n\nGift ideas: describe the person and ask for creative suggestions under your budget.\n\nAI isn't just a tech tool. It's a life tool."}
+]},
+{id:3,title:"AI for Your Work",lessons:[
+  {id:"3.1",title:"AI for Writing Better, Faster",duration:"8 min",slides:["The 4-step writing process","Reports and proposals","Client emails","Newsletters and updates","Performance reviews"],script:"Writing is probably the biggest time sink in most jobs. Here's your new process.\n\nStep one: brain dump. 'I need to write a quarterly report. Here's what happened... Turn this into a 2-page executive summary.'\n\nStep two: review and guide. 'Make the tone more optimistic. Add a section about team achievements.'\n\nStep three: polish your voice. 'Rewrite this in my voice. I'm direct and informal. I never say leverage or synergy.'\n\nStep four: final pass. 'Proofread this and give me 3 subject line options.'\n\nWhat used to take an hour now takes ten minutes."},
+  {id:"3.2",title:"AI for Meetings & Notes",duration:"8 min",slides:["Create the agenda","Summarize transcripts","Extract action items","Send follow-up emails"],script:"AI changes meetings — before, during, and after.\n\nBefore: 'I'm running a 30-minute team sync. Create a timed agenda.'\n\nAfter: paste your notes or transcript. 'Summarize this meeting. What were the 3 key decisions? Who's responsible for each action item?'\n\nThen: 'Write a follow-up email to all attendees summarizing decisions made and next steps.'\n\nFive minutes after the meeting ends, everyone has exactly what they need."},
+  {id:"3.3",title:"AI for Research & Learning at Work",duration:"8 min",slides:["Market & competitor research","Document summaries","Data interpretation","Fact-checking vendor claims"],script:"Research is where AI creates the most leverage.\n\nMarket research: 'Summarize the top 5 competitors to [company]. For each: main product, pricing, target customer, and what they do better.'\n\nDocument summaries: 'I have a 50-page report. Summarize the 5 most important findings.'\n\nData interpretation: 'Here's our Q2 sales data. What trends stand out?'\n\nFact-checking: 'Verify these 3 claims from a vendor's proposal.'\n\nAlways verify AI research against original sources. AI can hallucinate facts and statistics."},
+  {id:"3.4",title:"AI for Spreadsheets Without Formulas",duration:"8 min",slides:["From 'I hate Excel' to 'look what I made'","Create charts","Clean messy data","Budget analysis"],script:"You don't need to know formulas anymore.\n\nSay: 'I have a spreadsheet with columns for date, customer, product, revenue, and region. Find which region had the highest growth month-over-month. Walk me through it step by step.'\n\nThe AI doesn't just give you the answer. It walks you through the process — with exact formulas and where to paste them.\n\nYou can also ask: 'How do I freeze the top row?' 'How do I remove duplicates?' 'What chart type would best show this trend?'\n\nEvery spreadsheet question you've ever Googled — the AI can answer."},
+  {id:"3.5",title:"AI for Presentations & Reports",duration:"8 min",slides:["Slide-by-slide outline","Speaker notes","Anticipate tough questions","Time your presentation"],script:"Building a presentation used to mean staring at a blank slide deck. Not anymore.\n\nSay: 'I need to present Q3 results. Key points: revenue up 18%, launched product X, churn dropped to 2.5%. Create a slide-by-slide outline for a 15-minute presentation.'\n\nThen: 'Now write the speaker notes for each slide. Keep it conversational.'\n\nThen: 'Based on this outline, what are the 5 toughest questions the leadership team might ask?'\n\nYou go from 'I have a presentation next week' to 'I have a complete outline with speaker notes and prepared answers' — in ten minutes."},
+  {id:"3.6",title:"Choose Your Profession Path",duration:"8 min",slides:["Small Business Owner","Teacher / Educator","Real Estate Agent","Healthcare Admin"],script:"The last lesson is different. You choose a path based on your actual job.\n\nSmall Business Owner: marketing copy, customer service, inventory, social media, hiring.\n\nTeacher: lesson plans, grading rubrics, parent emails, differentiated instruction, quizzes.\n\nReal Estate Agent: listing descriptions, market analysis, client follow-ups, neighborhood guides.\n\nHealthcare Admin: patient communications, policy summaries, scheduling, compliance.\n\nEach path includes custom prompts and workflows specific to your profession."}
+]},
+{id:4,title:"Multi-Tool Mastery",lessons:[
+  {id:"4.1",title:"ChatGPT vs Claude vs Perplexity",duration:"7 min",slides:["When to use ChatGPT (creativity, everyday)","When to use Claude (long documents, nuance)","When to use Perplexity (research with sources)","Quick reference cheat sheet"],script:"No single AI is best at everything.\n\nChatGPT: best for creativity, brainstorming, everyday tasks. The Swiss Army knife.\n\nClaude: the deep thinker. Excels at analyzing long documents. More nuanced responses. Warmer tone. Larger context window.\n\nPerplexity: a research tool. Searches the web in real time. Cites its sources. Use when accuracy and verification matter.\n\nThe key insight: you don't have to pick one. Use all three. Different tools for different jobs."},
+  {id:"4.2",title:"Using AI Together — Workflows",duration:"7 min",slides:["Research → Write workflow","Analyze → Present workflow","Draft → Refine workflow","Compare answers from multiple AIs"],script:"Now the real power move: combining tools.\n\nResearch → Write: Perplexity finds the facts → ChatGPT drafts the report → Claude reviews and polishes.\n\nAnalyze → Present: Claude reads your data dump and finds the story → ChatGPT creates a presentation outline.\n\nCompare: ask the same question to ChatGPT AND Claude. Their different perspectives often reveal things neither would alone.\n\nEach tool does what it's best at. You're the conductor."},
+  {id:"4.3",title:"Creating Reusable Templates",duration:"7 min",slides:["Save your best prompts","Custom Instructions in ChatGPT","Prompt templates with blanks"],script:"Stop retyping the same instructions.\n\nCreate a prompt library: save your best prompts in a document. Copy, paste, tweak. Ten seconds instead of retyping.\n\nCustom Instructions (ChatGPT): tell it about yourself once — 'I'm a small business owner. I prefer direct, concise answers.' It remembers in every conversation.\n\nPrompt templates: 'Summarize [DOCUMENT] in [NUMBER] bullet points. Focus on [TOPIC].' Fill in the blanks. Instant quality."},
+  {id:"4.4",title:"Building Your Own Custom GPTs",duration:"7 min",slides:["What a Custom GPT is","Newsletter writer example","Meeting prep assistant","Travel agent","Study buddy"],script:"A Custom GPT is like giving ChatGPT a permanent job description.\n\nYou set it up once: 'You are my newsletter writer. My audience is small business owners. My tone is warm and practical. Every post should be 300-500 words.'\n\nNow, whenever you open your Custom GPT, it already knows who it is. You just say: 'This week's topic is managing cash flow.' Done.\n\nNo coding. Just describing what you want in plain English.\n\nAvailable with ChatGPT Plus ($20/month). Free tier users can achieve similar results with Custom Instructions + templates."},
+  {id:"4.5",title:"AI on Your Phone",duration:"7 min",slides:["Download the apps","Voice mode — talk to AI naturally","Camera & image recognition","AI on the go"],script:"Everything we've covered works on your phone.\n\nChatGPT, Claude, and Perplexity all have free apps. Same accounts, same conversations — synced across devices.\n\nVoice mode: tap the microphone and talk naturally. 'I'm at the grocery store — what else do I need for that recipe?'\n\nCamera: take a photo and ask about it. 'What kind of plant is this?' 'Translate this menu.'\n\nAI when and where you actually need it. In your pocket."}
+]},
+{id:5,title:"The API Bridge",lessons:[
+  {id:"5.1",title:"What's an API?",duration:"8 min",slides:["The restaurant analogy","APIs you already use every day","Why APIs matter for you"],script:"Three letters. API. They unlock everything.\n\nImagine a restaurant. You don't walk into the kitchen. You use the menu. The menu is the API — it tells you what you can order and how to ask for it. The kitchen is the AI. You are you.\n\nYou send a request → The AI processes it → You get a response.\n\nYou already use APIs every day. Weather apps. Google Maps. Online payments. Every app on your phone.\n\nWhen you understand APIs, AI can work inside your other tools — spreadsheets, email, websites — automatically. No chat window needed."},
+  {id:"5.2",title:"Getting Your Own API Key",duration:"8 min",slides:["Go to platform.openai.com","Add $5 payment","Generate your key","Cost & safety rules"],script:"Let's get you an API key. Five minutes. Five dollars.\n\nStep one: go to platform.openai.com.\nStep two: sign up or log in.\nStep three: add a payment method ($5 pre-pay).\nStep four: generate your key. Copy it immediately — you only see it once.\nStep five: save it in a password manager.\n\nCost: $5 covers thousands of questions. Each call costs fractions of a cent.\n\nSafety: your API key is like a password. Never share it. Never paste it into a chat. Store it securely."},
+  {id:"5.3",title:"Your First API Call",duration:"8 min",slides:["What gets sent","What comes back","Behind the chat window","No coding required"],script:"Let me show you what's actually happening every time you use AI.\n\nYou send: a request with your question. The AI responds with an answer — the same answer you'd see in the chat window. All the brackets and formatting are just packaging.\n\nThe AI doesn't care where the request comes from. A chat window. A spreadsheet. An automation tool. It just needs your API key and a clear question.\n\nFor your first API call, we'll use a simple web tool. No command line. No terminal. No code."},
+  {id:"5.4",title:"AI in Your Existing Tools",duration:"8 min",slides:["Google Sheets + GPT add-on","Notion AI","Zapier / Make.com bridges","Gmail AI tools"],script:"Now plug AI into the tools you already use.\n\nGoogle Sheets: install 'GPT for Sheets.' Enter your API key. Now =GPT('Summarize this feedback') works in any cell.\n\nNotion: built-in AI. Highlight text, say 'Summarize' or 'Improve writing.'\n\nZapier/Make.com: bridges that connect apps without code. 'When I get an email → have AI draft a reply → save to drafts.'\n\nGmail: tools like GhostWrite plug AI into your inbox. Select an email, click 'Draft Reply with AI.'"},
+  {id:"5.5",title:"The Power of Connecting Everything",duration:"8 min",slides:["Smart inbox","AI calendar","Living spreadsheets","Personal knowledge base","AI for your business"],script:"What becomes possible now:\n\nA smart inbox that sorts, prioritizes, and drafts replies automatically.\n\nAn AI calendar that schedules meetings by checking everyone's availability.\n\nLiving spreadsheets that pull in data, analyze it, and email you reports — without you opening Excel.\n\nA personal knowledge base where AI organizes everything you save and surfaces what you need.\n\nAI for your business: customer emails answered, leads qualified, social media scheduled, reports generated.\n\nThis isn't science fiction. Every piece exists today."}
+]},
+{id:6,title:"AI Agents — Your Digital Assistant",lessons:[
+  {id:"6.1",title:"What's an AI Agent?",duration:"8 min",slides:["Chatbot vs Agent","The personal assistant analogy","Agents can use tools","Agents work independently"],script:"A chatbot answers your questions. An agent does your tasks.\n\nYou say to a chatbot: 'What's the weather?' It tells you.\n\nYou say to an agent: 'Schedule a meeting with the team next Tuesday.' It checks everyone's calendar, finds a slot, sends invites, and confirms with you.\n\nA chatbot is reactive — it waits for you. An agent is proactive — it works toward a goal. A chatbot uses one tool: language. An agent uses many: calendars, email, web search, spreadsheets.\n\nYou're no longer the operator. You're the manager. You set the direction. The agent handles the execution."},
+  {id:"6.2",title:"Pre-Built Agents You Can Use Today",duration:"8 min",slides:["ChatGPT browsing & data analysis","Claude computer use","Perplexity research agent","Scheduling agents (Motion, Reclaim)"],script:"You don't have to build from scratch.\n\nChatGPT browsing: asks it to research — it searches the web, reads pages, synthesizes findings.\n\nChatGPT data analysis: upload a spreadsheet, say 'Analyze this and create charts.' It writes code, runs it, creates visualizations.\n\nClaude computer use: controls a computer — clicking, typing, navigating. 'Go to this website and summarize the pricing page.'\n\nPerplexity research: searches multiple sources, compares, synthesizes, cites everything.\n\nScheduling agents: Motion, Reclaim, Clockwise. Tell them your priorities. They schedule your time."},
+  {id:"6.3",title:"Building Your First Agent (No Code)",duration:"8 min",slides:["Pick your platform (Make.com)","Choose a trigger","Connect to AI","Define the output","Test & activate"],script:"Let's build your own agent. Fifteen minutes. No code.\n\nStep one: pick Make.com or Zapier.\nStep two: choose a trigger — 'Every morning at 8 AM' or 'When I add a task to my to-do list.'\nStep three: connect to AI. Paste your API key. Write instructions.\nStep four: define the output — where should results go?\nStep five: test and activate.\n\nStart simple. One trigger, one action. Get that working before adding complexity."},
+  {id:"6.4",title:"Real-World Agent Workflows",duration:"8 min",slides:["Email triage agent","Research briefing agent","Social media agent","Client follow-up agent","Weekly report agent"],script:"Agents people are actually using today:\n\nEmail triage: wakes up hourly, labels emails, drafts replies for the important ones.\n\nResearch agent: searches the web each morning, emails you a 3-paragraph briefing with sources.\n\nSocial media agent: generates a week of posts, schedules them, monitors engagement.\n\nClient follow-up: after every meeting, sends a personalized follow-up. After every proposal, checks in after 5 days.\n\nWeekly report: every Friday, pulls data from your tools and generates a 'what got done' report."},
+  {id:"6.5",title:"Automating Your Recurring Tasks",duration:"8 min",slides:["Do a personal automation audit","Pick ONE task to automate","Your 3-month automation roadmap"],script:"Do a personal automation audit. For one week, notice every task that: you do repeatedly, follows the same pattern, doesn't need your creativity, and you dread doing.\n\nPick ONE. Automate it this week. Live with it. Tweak it. Then pick the next one.\n\nYour roadmap:\nWeeks 1-2: automate one thing.\nWeeks 3-4: add a second agent.\nMonth 2: connect agents together.\nMonth 3+: maintain, expand, and free up your energy for what matters."}
+]},
+{id:7,title:"Staying Safe & Smart",lessons:[
+  {id:"7.1",title:"What NOT to Share With AI",duration:"6 min",slides:["Personal identifying info","Financial details","Company secrets","Medical records","Passwords & API keys","The Billboard Test"],script:"Some things should never go into an AI.\n\nPersonal identifying information: SSN, passport, driver's license.\nFinancial details: bank accounts, credit cards, tax returns with identifiers.\nCompany secrets: unreleased products, strategy docs, client lists.\nMedical records: with your name attached.\nPasswords and API keys: never, under any circumstances.\n\nSimple rule — the Billboard Test. Before you paste anything, ask: 'Would I be comfortable seeing this on a billboard?' If no, don't share it."},
+  {id:"7.2",title:"Spotting AI Mistakes & Hallucinations",duration:"6 min",slides:["Dates and numbers — question everything","Citations and quotes — often invented","Niche topics — high hallucination risk","Fake URLs and references"],script:"AI sounds confident even when it's completely wrong.\n\nRed flags:\nDates and numbers: question every specific date, statistic, and dollar amount.\nCitations and quotes: AI loves inventing quotes from famous people.\nNiche topics: the more specialized, the more likely AI hallucinates.\nToo-perfect answers: if it's exactly what you wanted to hear, be extra skeptical.\nFake URLs: AI generates plausible but fake web addresses.\n\nThe bottom line: trust, but verify. AI is a brilliant assistant. It's also a convincing liar."},
+  {id:"7.3",title:"AI Scams to Watch Out For",duration:"6 min",slides:["AI phishing emails","Fake AI tools (malware)","Voice cloning scams","Deepfakes and fake news","'Get rich with AI' schemes"],script:"Scammers love new technology.\n\nAI phishing: perfect emails that look exactly like your bank. Verify through a different channel — call, don't click.\n\nFake AI tools: 'Download this free AI assistant!' It's malware. Only use official app stores.\n\nVoice cloning: 'Grandma, I'm in trouble.' Establish a family code word for emergencies.\n\nFake news: AI generates realistic images and videos in seconds. Pause and verify before sharing.\n\nGet-rich-quick schemes: 'Make $10K/month with AI!' If it sounds too good to be true, it is."},
+  {id:"7.4",title:"Using AI Ethically",duration:"6 min",slides:["Be transparent about AI use","Don't plagiarize","AI augments, not replaces","Teach the next generation"],script:"Four ethical guidelines:\n\nOne: be transparent. When you use AI for something significant, disclose it. 'Written with AI assistance.'\n\nTwo: don't plagiarize. AI output is a starting point. Add your thinking. Rewrite in your voice. You're the author.\n\nThree: AI augments, not replaces. Your judgment matters. AI suggests — you decide. Especially for decisions about people.\n\nFour: teach the next generation. Show kids how to use AI as a learning tool, not a cheating tool."},
+  {id:"7.5",title:"Your AI Journey Continues",duration:"6 min",slides:["Pick ONE newsletter","Practice weekly","Join the community","Monthly automation check-in","Share what you know"],script:"You've completed the course. Now what?\n\nOne: pick ONE AI newsletter. Five minutes a day. Delete the rest.\n\nTwo: practice weekly. Use AI for one real thing every day.\n\nThree: join the community. Share prompts. Ask questions. Help others.\n\nFour: monthly check-in. What's one thing you're doing manually that an agent could handle?\n\nFive: share what you know. You're now more AI-literate than 90% of the population.\n\nYou don't just know about AI now. You use it. Every day. That's the difference between learning and doing.\n\nCongratulations. You did it."}
+]}
+];
+
+// ====== APP LOGIC ======
+let currentModule=0,currentLesson=0,access=false;
+
+// Build landing module grid
+document.getElementById("modGrid").innerHTML=COURSE.map(m=>`
+  <div class="mod-card">
+    <div class="num">Module ${m.id}</div>
+    <div class="name">${m.title}</div>
+    <div class="info">${m.lessons.length} lessons</div>
+  </div>
+`).join("");
+
+// Build sidebar
+function buildSidebar(){
+  document.getElementById("sidebar").innerHTML=`
+    <h3>📚 Everyday AI</h3>
+    ${COURSE.map(m=>`
+      <div class="mod-link${m.id===currentModule?' active':''}" onclick="selectModule(${m.id})">
+        <span class="mnum">MODULE ${m.id}</span>${m.title}
+      </div>
+      ${m.lessons.map(l=>`
+        <div class="lesson-link${m.id===currentModule&&l.id===currentLesson?.id?' active':''}" onclick="selectLesson(${m.id},'${l.id}')">
+          ${l.id} ${l.title}
+        </div>
+      `).join("")}
+    `).join("")}
+  `;
+}
+
+// Render lesson
+function renderLesson(modId,lessonId){
+  const mod=COURSE.find(m=>m.id===modId);
+  const lesson=mod.lessons.find(l=>l.id===lessonId);
+  if(!lesson)return;
+  currentModule=modId;
+  currentLesson=lesson;
+  
+  document.getElementById("content").innerHTML=`
+    <div class="course-header">
+      <div>
+        <div class="lesson-label">MODULE ${mod.id} • LESSON ${lesson.id}</div>
+        <h2>${lesson.title}</h2>
+        <div style="color:var(--muted);font-size:14px">⏱ ${lesson.duration}</div>
+      </div>
+      <button class="btn btn-teal" onclick="markComplete('${modId}','${lessonId}')" style="font-size:13px;padding:8px 16px">
+        ${isComplete(modId,lessonId)?'✓ Completed':'Mark Complete'}
+      </button>
+    </div>
+    <div class="progress-bar"><div class="fill" style="width:${progressPercent()}%"></div></div>
+    <h3 style="margin-top:24px">Slides</h3>
+    <div class="slide-list">
+      ${lesson.slides.map(s=>`<div class="slide-item">${s}</div>`).join("")}
+    </div>
+    <h3 style="margin-top:24px">Full Narration Script</h3>
+    <div class="script">${lesson.script}</div>
+    <div class="exercise">
+      <strong>🖐️ Your Turn</strong>
+      <p style="margin-top:8px">Pause here. Try what you just learned on your own device. Use the prompt examples from the slides above.</p>
+    </div>
+    <div style="margin-top:24px;display:flex;gap:12px">
+      ${prevLesson(modId,lessonId)?`<button class="btn btn-teal" onclick="selectLesson(${modId},'${prevLesson(modId,lessonId)}')">← Previous</button>`:''}
+      ${nextLesson(modId,lessonId)?`<button class="btn btn-teal" onclick="selectLesson(${modId},'${nextLesson(modId,lessonId)}')">Next →</button>`:''}
+    </div>
+  `;
+  buildSidebar();
+  if(window.innerWidth<=768)document.querySelector(".sidebar").classList.remove("open");
+}
+
+function selectModule(id){currentModule=id;const m=COURSE.find(x=>x.id===id);selectLesson(id,m.lessons[0].id)}
+function selectLesson(modId,lessonId){renderLesson(modId,lessonId);document.getElementById("content").scrollTop=0}
+
+function prevLesson(mid,lid){
+  const mod=COURSE.find(m=>m.id===mid);
+  const idx=mod.lessons.findIndex(l=>l.id===lid);
+  if(idx>0)return mod.lessons[idx-1].id;
+  const prevMod=COURSE.find(m=>m.id===mid-1);
+  if(prevMod)return prevMod.lessons[prevMod.lessons.length-1].id;
+  return null;
+}
+function nextLesson(mid,lid){
+  const mod=COURSE.find(m=>m.id===mid);
+  const idx=mod.lessons.findIndex(l=>l.id===lid);
+  if(idx<mod.lessons.length-1)return mod.lessons[idx+1].id;
+  const nextMod=COURSE.find(m=>m.id===mid+1);
+  if(nextMod)return nextMod.lessons[0].id;
+  return null;
+}
+
+// Progress tracking
+function markComplete(mid,lid){
+  const key=`ea-progress-${mid}-${lid}`;
+  if(localStorage.getItem(key)){localStorage.removeItem(key)}else{localStorage.setItem(key,"1")}
+  renderLesson(mid,lid);
+}
+function isComplete(mid,lid){return!!localStorage.getItem(`ea-progress-${mid}-${lid}`)}
+function progressPercent(){
+  let total=0,complete=0;
+  COURSE.forEach(m=>m.lessons.forEach(l=>{total++;if(isComplete(m.id,l.id))complete++}));
+  return total?Math.round(complete/total*100):0;
+}
+
+// Stripe checkout
+async function buy(){
+  try{
+    const res=await fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"}});
+    const data=await res.json();
+    if(data.url)window.location.href=data.url;
+    else alert("Payment system unavailable. Please try again later.");
+  }catch(e){alert("Could not connect to payment system.")}
+}
+
+// Init
+(async function(){
+  const params=new URLSearchParams(window.location.search);
+  const sessionId=params.get("session_id");
+  if(sessionId){
+    // Verify payment
+    document.getElementById("landing").style.display="none";
+    document.getElementById("gate").style.display="flex";
+    try{
+      const res=await fetch(`/api/verify/${sessionId}`);
+      const data=await res.json();
+      if(data.paid){
+        access=true;
+        document.getElementById("gate").style.display="none";
+        document.getElementById("viewer").classList.add("active");
+        selectModule(0);
+      }else{
+        document.getElementById("gate").innerHTML='<div class="gate-box"><h2>Payment Not Confirmed</h2><p>We couldn\'t verify your purchase. Please try again or contact support.</p><a href="/" class="btn btn-gold">Back to Home</a></div>';
+      }
+    }catch(e){
+      document.getElementById("gate").innerHTML='<div class="gate-box"><h2>Something went wrong</h2><p>Please try again or contact support.</p><a href="/" class="btn btn-gold">Back to Home</a></div>';
+    }
+  }else{
+    // Show landing
+    document.getElementById("landing").style.display="block";
+  }
+})();
+</script>
+</body>
+</html>

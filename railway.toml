@@ -1,0 +1,6 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd course-site && npm install"
+
+[deploy]
+startCommand = "cd course-site && node server.js"
