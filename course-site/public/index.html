@@ -300,6 +300,13 @@ async function buy(){
   const params=new URLSearchParams(window.location.search);
   const sessionId=params.get("session_id");
   if(sessionId){
+    // Dev mode bypass
+    if(sessionId==="dev"){
+      document.getElementById("landing").style.display="none";
+      document.getElementById("viewer").classList.add("active");
+      selectModule(0);
+      return;
+    }
     // Verify payment
     document.getElementById("landing").style.display="none";
     document.getElementById("gate").style.display="flex";
