@@ -21,7 +21,7 @@ Every lesson follows four rules:
 ---
 
 ## MODULE 0: Welcome — You Belong Here
-*3 lessons | ~10 minutes | FREE preview on YouTube*
+*3 lessons | ~10 minutes*
 
 **Goal:** Eliminate anxiety, set expectations, get learners excited.
 
@@ -168,13 +168,13 @@ Every lesson follows four rules:
 - **Exercise prompt:** Specific "You Try It" with success criteria
 - **Troubleshooting card:** "If this happens, try this"
 
-### Platform & Pricing Strategy
-| Tier | Price | Includes |
-|------|-------|----------|
-| Free | $0 | Module 0 + 2 sample lessons, newsletter |
-| Core | $97 | Modules 1–3, cheat sheets, exercise library |
-| Pro | $197 | All 7 modules, profession paths, API/agent deep dives |
-| Community | $19/mo | Live Q&A, accountability groups, monthly updates |
+### Pricing
+
+One price. Lifetime access.
+
+| Price | Includes |
+|-------|----------|
+| **$399** | All 7 modules, 42+ lessons, cheat sheets, exercise library, profession paths, API/agent deep dives, certificate of completion |
 
 ---
 
