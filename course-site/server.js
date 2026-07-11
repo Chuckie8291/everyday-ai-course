@@ -32,17 +32,16 @@ app.post("/api/checkout", express.json(), async (req, res) => {
 
 // Verify session (called from course page to confirm payment)
 app.get("/api/verify/:sessionId", async (req, res) => {
+  // Dev mode: no Stripe key → always allow access
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return res.json({ paid: true, reason: "dev_mode" });
+  }
   try {
     const stripeKey = process.env.STRIPE_SECRET_KEY;
-    if (!stripeKey) return res.json({ paid: false, reason: "not_configured" });
     const stripe = require("stripe")(stripeKey);
     const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
     res.json({ paid: session.payment_status === "paid" });
   } catch (e) {
-    // If no Stripe key is set, allow access in dev mode
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.json({ paid: true, reason: "dev_mode" });
-    }
     res.json({ paid: false, reason: e.message });
   }
 });
