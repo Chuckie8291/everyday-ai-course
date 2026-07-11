@@ -16,7 +16,7 @@ app.post("/api/checkout", express.json(), async (req, res) => {
         price_data: {
           currency: "usd",
           product_data: { name: "Everyday AI: From Curious to Confident — Full Course" },
-          unit_amount: 9700 // $97
+          unit_amount: 39900 // $399
         },
         quantity: 1
       }],
